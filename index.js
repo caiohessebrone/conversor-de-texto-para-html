@@ -7,12 +7,17 @@ const rl = readline.createInterface({
     input: readable,
 });
 
+const manipulingText = (line, condition, newValue) => {
+    output = line.replace(condition, '').trim()
+    fs.appendFileSync(contentPath, `${newValue}${output}${newValue.replace('<', '</')}\n`)
+}
+
 rl.on('line', (line) => {
-    if (line.startsWith('##')) {
-        fs.appendFileSync(contentPath, line.replace('##', 'h1'))
+    if (line.startsWith('[h1]')) {
+        manipulingText(line, '[h1]', '<h1>');
     }
-    if (line.startsWith('#')) {
-        fs.appendFileSync(contentPath, line.replace('#', 'h2')+'\n');
+    if (line.startsWith('[h2]')) {
+        manipulingText(line, '[h2]', '<h2>');
     }
     console.log(line);
 });

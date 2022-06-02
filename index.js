@@ -7,15 +7,31 @@ const rl = readline.createInterface({
     input: readable,
 });
 
-const manipulingText = (line, condition, newValue) => {
-    output = line.replace(condition, '').trim()
-    fs.appendFileSync(contentPath, `${newValue}${output}${newValue.replace('<', '</')}\n`)
+const manipulingLink = (line, outElement=false) => {
+    const link = line.match(/\[link.*\]/)[0].split(';').slice(1);
+    const metaLink = {
+        href: link[0].split(',')[0].replace('[', '').trim(),
+        target: link[0].split(',')[1].replace(']', '').trim(),
+    }
+    const result = `<a href=${metaLink.href} target="${metaLink.target}">${link[1]}</a>`;
+    if (!outElement) {
+        return result;
+    }else {
+        fs.appendFileSync(contentPath, result);
+    }
+
 }
 
-const manipulingLink = (line) => {
-    const infoLink = line.slice(7).replace(/].*/, '').split(',')
-    const contentLink = line.slice(7).replace(/.*]/, '').trim()
-    fs.appendFileSync(contentPath, `<a href=${infoLink[0]} target="${infoLink[1].trim()}">${contentLink}</a>`)
+const manipulingText = (line, condition, newValue) => {
+    output = line.replace(condition, '').trim()
+    lineOutpu = `${newValue}${output}${newValue.replace('<', '</')}\n`;
+    if (line.includes('[link]')) {
+        const link = lineOutpu.match(/\[link.*\]/)[0].split(';').slice(1);
+        const fullString = lineOutpu.replace(/\[link.*\]/, manipulingLink(lineOutpu))
+        fs.appendFileSync(contentPath, fullString)
+    }else {
+        fs.appendFileSync(contentPath, lineOutpu)
+    }
 }
 
 rl.on('line', (line) => {
@@ -26,7 +42,7 @@ rl.on('line', (line) => {
         manipulingText(line, '[h2]', '<h2>');
     }
     if (line.startsWith('[link]')) {
-        manipulingLink(line)
+        manipulingLink(line, true)
     }
     console.log(line);
 });

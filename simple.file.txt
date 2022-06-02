@@ -1,3 +1,6 @@
 [h1] ola mundo
 [h2] Estou testando o arquivo do caio
-[link]["www.google.com", _blank] ver mais
+[h2] Estou testando o arquivo do [link];["www.google.com", _blank];[caio] alves hesse brone
+[h2] Tente mais um vez se for capaz
+[h1] eu gosto de [link];["www.animes.com", _black];[animes] de luta
+[link];["www.animes.com", _black];[animes]

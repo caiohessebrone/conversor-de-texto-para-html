@@ -35,14 +35,15 @@ const manipulingText = (line, condition, newValue) => {
 }
 
 rl.on('line', (line) => {
-    if (line.startsWith('[h1]')) {
-        manipulingText(line, '[h1]', '<h1>');
+    switch (true) {
+        case line.startsWith('[h1]'):
+            manipulingText(line, '[h1]', '<h1>');
+            break;
+        case line.startsWith('[h2]'):
+            manipulingText(line, '[h2]', '<h2>');
+            break;
+        case line.startsWith('[link]'):
+            manipulingLink(line, true);
+            break
     }
-    if (line.startsWith('[h2]')) {
-        manipulingText(line, '[h2]', '<h2>');
-    }
-    if (line.startsWith('[link]')) {
-        manipulingLink(line, true)
-    }
-    console.log(line);
 });
